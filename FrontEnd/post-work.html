@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Titre de la page</title>
+ <script type="text/javascript">
+   const token = sessionStorage.setItem('token', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY4MDkzNzQwNCwiZXhwIjoxNjgxMDIzODA0fQ.icVxKC3zYMCAhGiUkUrbUmMhEcXv-Zj7tMJa6Dvtuv8")
+
+   document.addEventListener('DOMContentLoaded', () => {
+    document.querySelector('form').addEventListener('submit', async e => {
+      try {
+        e.preventDefault()
+        const token = sessionStorage.getItem('token')
+        const payload = JSON.parse(atob(token.split('.')[1]))
+        console.log('payload', payload)
+                console.log('payload userid', payload.userId)
+
+        const body = new FormData(document.querySelector('form'))
+        body.append('userId', payload.userId)
+        console.log('body', body)
+        const response = await fetch('http://localhost:5678/api/works', {method: 'POST', body, headers: {  accept: 'application/json', Authorization: token }})
+          const json = await response.json()
+          console.log('json ', json)
+      }catch(e)
+      {
+        console.warn(e)
+      }
+    })
+   })
+
+
+
+ </script>
+</head>
+<body>
+  <!--<form enctype="multipart/form-data">-->
+      <form >
+
+    <input type="text" name="title" value="buda"> <br>
+    <input type="number" name="category" max=10 value="1" ><br>
+    <input type="file" name="image" >
+    <input type="submit" >
+  </form>
+</body>
+</html>
